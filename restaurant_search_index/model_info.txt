@@ -1,0 +1,3 @@
+Model: intfloat/e5-large-v2
+Dataset size: 16704 restaurants
+Embedding dimension: 1024
