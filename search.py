@@ -57,7 +57,7 @@ class RestaurantSearchSystem:
                     "content": (
                     "You are a restaurant search query parser. Extract information and return valid JSON only.\n\n"
                     "Rules:\n"
-                    "- If query mentions a single price/budget (e.g., '1k budget', 'priced at 1000'), set BOTH cost_min AND cost_max to that value\n"
+                    "- If query mentions a single price/budget (e.g., '1k budget', 'priced at 1000') set BOTH cost_min AND cost_max to that value\n"
                     "- If query mentions a range (e.g., '500 to 1000'), set cost_min=500, cost_max=1000\n"
                     "- cost_min/cost_max: Convert 1k→1000, 2.5k→2500\n"
                     f"- features: Choose from these terms: {features_str}\n"
@@ -101,7 +101,6 @@ class RestaurantSearchSystem:
         cost_min = constraints.get('cost_min')
         cost_max = constraints.get('cost_max')
 
-        # Safely cast to numbers
         try:
             cost_min = float(cost_min) if cost_min is not None else None
         except (TypeError, ValueError):
@@ -113,11 +112,10 @@ class RestaurantSearchSystem:
 
         for i, meta in enumerate(self.metadata):
             try:
-                cost = float(meta['cost_for_two'])  # make sure cost is numeric
+                cost = float(meta['cost_for_two']) 
             except (TypeError, ValueError):
-                continue  # skip if cost is invalid
+                continue
 
-            # Filtering
             if cost_min is not None and cost < cost_min:
                 continue
             if cost_max is not None and cost > cost_max:
@@ -129,7 +127,6 @@ class RestaurantSearchSystem:
 
             valid_indices.append(i)
 
-        # Fallback: if no matches, allow all
         if not valid_indices:
             valid_indices = list(range(len(self.metadata)))
 
@@ -165,17 +162,16 @@ class RestaurantSearchSystem:
         for i, idx in enumerate(results_indices):
             if idx < len(self.metadata):
                 meta = self.metadata[idx]
-                # Convert cost_for_two to float here
                 try:
                     cost_for_two = float(meta['cost_for_two'])
                 except (TypeError, ValueError):
-                    cost_for_two = 0.0  # fallback value
+                    cost_for_two = 0.0
                     
                 results.append({
                     'restaurant_name': meta['restaurant_name'],
                     'cuisines': meta['cuisines'],
                     'features': meta['features'],
-                    'cost_for_two': cost_for_two,  # Now it's a float
+                    'cost_for_two': cost_for_two,
                     'similarity_score': float(scores[0][i]) if i < len(scores[0]) else 0.0
                 })
         
