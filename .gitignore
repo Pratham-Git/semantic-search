@@ -1,0 +1,17 @@
+
+# large caches and data
+openai_embedding_cache.pkl
+openai_embedding_progress.txt
+**/restaurant_search_index/**
+**/*.faiss
+**/*.pkl
+**/*.csv
+
+# python artifacts
+__pycache__/ 
+*.pyc
+.DS_Store
+
+# env files
+*.env
+
